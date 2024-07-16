@@ -1,9 +1,8 @@
 import 'package:flame/components.dart';
-
-import '../assets/tileset.dart';
-import '../collections.dart';
-import '../game.dart';
-import '../util.dart';
+import 'package:gravitational_waves/game/assets/tileset.dart';
+import 'package:gravitational_waves/game/collections.dart';
+import 'package:gravitational_waves/game/game.dart';
+import 'package:gravitational_waves/game/util.dart';
 
 class Planet extends SpriteComponent with HasGameRef<MyGame> {
   Planet() {
@@ -31,7 +30,4 @@ class Planet extends SpriteComponent with HasGameRef<MyGame> {
 
   @override
   int get priority => 1;
-
-  @override
-  PositionType get positionType => PositionType.viewport;
 }

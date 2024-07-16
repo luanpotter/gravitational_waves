@@ -1,10 +1,9 @@
 import 'package:dartlin/dartlin.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/sprite.dart';
-
-import '../collections.dart';
-import '../util.dart';
-import 'spritesheet.dart';
+import 'package:gravitational_waves/game/assets/spritesheet.dart';
+import 'package:gravitational_waves/game/collections.dart';
+import 'package:gravitational_waves/game/util.dart';
 
 enum OuterTilePosition {
   topLeft,

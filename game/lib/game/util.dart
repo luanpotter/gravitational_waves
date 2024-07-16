@@ -2,19 +2,21 @@ import 'dart:convert';
 import 'dart:math' as math;
 
 import 'package:dartlin/dartlin.dart';
+import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/widgets.dart';
+import 'package:gravitational_waves/game/palette.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import 'palette.dart';
 
 final R = math.Random();
 
-const ENABLE_AUDIO = true;
+const ENABLE_AUDIO = false;
 const DEBUG = false;
 const CHECK_PLAYER_ID = false;
 const ENABLE_REVAMP = true;
-const ENABLE_ADS = true;
+const ENABLE_ADS = false;
+const ENABLE_FIREBASE = false;
+const ENABLE_SPLASH = false;
 
 const BLOCK_SIZE = 16.0;
 const BLOCK_SIZE_INT = 16;
@@ -62,4 +64,10 @@ class Fonts {
   static final TextPaint tutorial = _base.copyWith(
     (it) => it.copyWith(fontSize: 24.0, color: Palette.hud.color),
   );
+}
+
+extension Clear on Component {
+  void clear() {
+    removeAll(children);
+  }
 }

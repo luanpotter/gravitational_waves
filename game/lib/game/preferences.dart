@@ -1,9 +1,8 @@
 import 'dart:async';
 
+import 'package:gravitational_waves/game/audio.dart';
+import 'package:gravitational_waves/game/util.dart';
 import 'package:json_annotation/json_annotation.dart';
-
-import 'audio.dart';
-import 'util.dart';
 
 part 'preferences.g.dart';
 

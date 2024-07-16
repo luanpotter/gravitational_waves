@@ -1,15 +1,14 @@
 import 'package:dartlin/collections.dart';
 import 'package:flame/components.dart';
-
-import '../../collections.dart';
-import '../../game.dart';
-import '../../spawner.dart';
-import '../../util.dart';
-import '../background.dart';
-import 'crystal_container_pickup.dart';
-import 'firing_ship.dart';
-import 'jetpack_pickup.dart';
-import 'space_battle.dart';
+import 'package:gravitational_waves/game/collections.dart';
+import 'package:gravitational_waves/game/components/background.dart';
+import 'package:gravitational_waves/game/components/revamped/crystal_container_pickup.dart';
+import 'package:gravitational_waves/game/components/revamped/firing_ship.dart';
+import 'package:gravitational_waves/game/components/revamped/jetpack_pickup.dart';
+import 'package:gravitational_waves/game/components/revamped/space_battle.dart';
+import 'package:gravitational_waves/game/game.dart';
+import 'package:gravitational_waves/game/spawner.dart';
+import 'package:gravitational_waves/game/util.dart';
 
 // change this if you want to easily test all powerups.
 const _M = 1.0;
@@ -40,7 +39,7 @@ class Powerups extends Component with HasGameRef<MyGame> {
     if (!hasSpaceBattle) {
       spaceBattleSpawner.maybeSpawn(dt, () {
         hasSpaceBattle = true;
-        gameRef.add(SpaceBattle());
+        gameRef.camera.viewport.add(SpaceBattle());
       });
     }
 
@@ -61,7 +60,7 @@ class Powerups extends Component with HasGameRef<MyGame> {
   }
 
   Vector2? maybeGetOffscreenPosition() {
-    final offscreenX = gameRef.camera.position.x + gameRef.size.x + 1;
+    final offscreenX = gameRef.cameraX + gameRef.size.x + 1;
     final firstOffscreen = gameRef.children
         .whereType<Background>()
         .firstOrNull((c) => c.x > offscreenX);
@@ -76,7 +75,7 @@ class Powerups extends Component with HasGameRef<MyGame> {
 
   void spawnFiringShip() {
     if (!gameRef.sleeping) {
-      gameRef.add(FiringShip());
+      gameRef.camera.viewport.add(FiringShip());
     }
   }
 }

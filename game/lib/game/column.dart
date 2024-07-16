@@ -1,11 +1,13 @@
-import 'assets/tileset.dart';
-import 'util.dart';
+import 'package:gravitational_waves/game/assets/tileset.dart';
+import 'package:gravitational_waves/game/util.dart';
 
 class Column {
   static const OFFSET = 5;
 
-  int bottom, top;
-  late int bottomVariant, topVariant;
+  int bottom;
+  int top;
+  late int bottomVariant;
+  late int topVariant;
 
   Column(this.bottom, this.top) {
     bottomVariant = Tileset.randomVariant();

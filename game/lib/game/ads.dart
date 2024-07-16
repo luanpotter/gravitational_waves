@@ -2,10 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:gravitational_waves/game/analytics.dart';
+import 'package:gravitational_waves/game/util.dart';
 import 'package:oktoast/oktoast.dart';
-
-import 'analytics.dart';
-import 'util.dart';
 
 class Ads {
   static bool _loaded = false;
@@ -79,11 +78,11 @@ class Ads {
       }
       ad.fullScreenContentCallback = null;
       ad.show(
-        onUserEarnedReward: (RewardedAd ad, RewardItem rewardItem) {
+        onUserEarnedReward: (_, __) {
           promise.complete(true);
         },
       );
-    } catch (ex) {
+    } on Exception catch (ex) {
       print('Unexpected error while loading ad: $ex');
       showToast('Unexpected error while loading the ad.');
       promise.complete(false);

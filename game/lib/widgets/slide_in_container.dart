@@ -9,17 +9,18 @@ class SlideInContainer extends StatefulWidget {
 
   const SlideInContainer({
     required this.child,
-    this.from = const Offset(0.0, 0.0),
-    this.to = const Offset(0.0, 0.0),
+    super.key,
+    this.from = Offset.zero,
+    this.to = Offset.zero,
     this.duration = const Duration(seconds: 1),
     this.curve = Curves.easeInExpo,
   });
 
   @override
-  _SlideInContainer createState() => _SlideInContainer();
+  SlideInContainerState createState() => SlideInContainerState();
 }
 
-class _SlideInContainer extends State<SlideInContainer>
+class SlideInContainerState extends State<SlideInContainer>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<Offset> _offsetAnimation;

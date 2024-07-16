@@ -1,10 +1,9 @@
 import 'dart:ui';
 
 import 'package:flame/components.dart';
-
-import '../game.dart';
-import '../util.dart';
-import 'coin.dart';
+import 'package:gravitational_waves/game/components/coin.dart';
+import 'package:gravitational_waves/game/game.dart';
+import 'package:gravitational_waves/game/util.dart';
 
 class Hud extends Component with HasGameRef<MyGame> {
   static const double MARGIN = 8.0;
@@ -53,9 +52,6 @@ class Hud extends Component with HasGameRef<MyGame> {
 
     Fonts.hud.render(c, p2, Vector2(x3, MARGIN));
   }
-
-  @override
-  PositionType get positionType => PositionType.viewport;
 
   @override
   int get priority => 6;

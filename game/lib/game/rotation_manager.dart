@@ -1,6 +1,6 @@
-import 'collections.dart';
-import 'spawner.dart';
-import 'util.dart';
+import 'package:gravitational_waves/game/collections.dart';
+import 'package:gravitational_waves/game/spawner.dart';
+import 'package:gravitational_waves/game/util.dart';
 
 class RotationManager {
   static final prob = [-1, 0, 0, 1];

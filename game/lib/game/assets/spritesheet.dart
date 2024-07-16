@@ -9,7 +9,12 @@ const double _SRC_SIZE = 16.0;
 
 @JsonSerializable()
 class AnimationElement {
-  final int x, y, w, h, length, millis;
+  final int x;
+  final int y;
+  final int w;
+  final int h;
+  final int length;
+  final int millis;
 
   AnimationElement(this.x, this.y, this.w, this.h, this.length, this.millis);
 

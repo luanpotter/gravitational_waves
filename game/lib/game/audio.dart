@@ -1,18 +1,17 @@
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flame_audio/flame_audio.dart';
-
-import 'preferences.dart';
-import 'util.dart';
+import 'package:gravitational_waves/game/preferences.dart';
+import 'package:gravitational_waves/game/util.dart';
 
 class Audio {
-  static final AudioCache musicPlayer = _createLoopingPlayer(
+  static final AudioPlayer musicPlayer = _createLoopingPlayer(
     prefix: 'assets/audio/',
   );
 
-  static AudioCache _createLoopingPlayer({required String prefix}) {
+  static AudioPlayer _createLoopingPlayer({required String prefix}) {
     final player = AudioPlayer();
-    player.setReleaseMode(ReleaseMode.LOOP);
-    return AudioCache(prefix: prefix, fixedPlayer: player);
+    player.audioCache = AudioCache(prefix: prefix);
+    player.setReleaseMode(ReleaseMode.loop);
+    return player;
   }
 
   static Future init() async {
@@ -40,33 +39,33 @@ class Audio {
     FlameAudio.play('sfx/$sound');
   }
 
-  static void music(String song) async {
+  static Future<void> music(String song) async {
     if (!ENABLE_AUDIO) {
       return;
     }
     if (!Preferences.instance.musicOn) {
       return;
     }
-    await musicPlayer.play('music/$song');
+    await musicPlayer.play(AssetSource('music/$song'));
   }
 
-  static void stopMusic() async {
-    await musicPlayer.fixedPlayer?.stop();
+  static Future<void> stopMusic() async {
+    await musicPlayer.stop();
   }
 
-  static void pauseMusic() async {
-    await musicPlayer.fixedPlayer?.pause();
+  static Future<void> pauseMusic() async {
+    await musicPlayer.pause();
   }
 
-  static void resumeMusic() async {
-    await musicPlayer.fixedPlayer?.resume();
+  static Future<void> resumeMusic() async {
+    await musicPlayer.resume();
   }
 
-  static void gameMusic() async {
+  static Future<void> gameMusic() async {
     return music('dark-moon.mp3');
   }
 
-  static void menuMusic() async {
+  static Future<void> menuMusic() async {
     return music('contemplative-breaks.mp3');
   }
 }

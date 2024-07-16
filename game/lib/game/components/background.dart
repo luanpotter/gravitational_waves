@@ -2,13 +2,12 @@ import 'dart:ui';
 
 import 'package:dartlin/collections.dart';
 import 'package:flame/components.dart';
-
-import '../assets/tileset.dart';
-import '../column.dart';
-import '../game.dart';
-import '../palette.dart';
-import '../util.dart';
-import 'tutorial.dart';
+import 'package:gravitational_waves/game/assets/tileset.dart';
+import 'package:gravitational_waves/game/column.dart';
+import 'package:gravitational_waves/game/components/tutorial.dart';
+import 'package:gravitational_waves/game/game.dart';
+import 'package:gravitational_waves/game/palette.dart';
+import 'package:gravitational_waves/game/util.dart';
 
 class Background extends PositionComponent with HasGameRef<MyGame> {
   static final Paint _bg = Palette.background.paint();
@@ -17,7 +16,7 @@ class Background extends PositionComponent with HasGameRef<MyGame> {
 
   Background(double x) {
     this.x = x;
-    columns = _generateChunck(CHUNK_SIZE).toList();
+    columns = _generateChunk(CHUNK_SIZE).toList();
   }
 
   Background.plains(double x) {
@@ -34,9 +33,13 @@ class Background extends PositionComponent with HasGameRef<MyGame> {
     return List.generate(size, (_) => Column(0, 0));
   }
 
-  static Iterable<Column> _generateChunck(int size) sync* {
-    int? beforeTop, beforeBottom;
-    var changesTop = 0, changesBottom = 0;
+  static Iterable<Column> _generateChunk(int size) sync* {
+    int? beforeTop;
+    int? beforeBottom;
+
+    var changesTop = 0;
+    var changesBottom = 0;
+
     for (var i = 0; i < size; i++) {
       if (i < 3 || i >= size - 3) {
         yield Column(0, 0);
@@ -192,7 +195,7 @@ class Background extends PositionComponent with HasGameRef<MyGame> {
   @override
   void update(double dt) {
     super.update(dt);
-    if (endX < gameRef.camera.position.x - gameRef.size.x) {
+    if (endX < gameRef.cameraX - gameRef.size.x) {
       removeFromParent();
     }
   }

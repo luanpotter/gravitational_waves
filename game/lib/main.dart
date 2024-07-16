@@ -4,41 +4,43 @@ import 'package:flame_splash_screen/flame_splash_screen.dart';
 import 'package:flutter/foundation.dart'
     show debugDefaultTargetPlatformOverride, kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:gravitational_waves/game/ads.dart';
+import 'package:gravitational_waves/game/analytics.dart';
+import 'package:gravitational_waves/game/assets/char.dart';
+import 'package:gravitational_waves/game/assets/poofs.dart';
+import 'package:gravitational_waves/game/assets/tileset.dart';
+import 'package:gravitational_waves/game/audio.dart';
+import 'package:gravitational_waves/game/game_data.dart';
+import 'package:gravitational_waves/game/preferences.dart';
+import 'package:gravitational_waves/game/util.dart';
+import 'package:gravitational_waves/screens/credits_screen.dart';
+import 'package:gravitational_waves/screens/game_screen.dart';
+import 'package:gravitational_waves/screens/join_scoreboard_screen.dart';
+import 'package:gravitational_waves/screens/options_screen.dart';
+import 'package:gravitational_waves/screens/scoreboard_screen.dart';
+import 'package:gravitational_waves/screens/skins_screen.dart';
+import 'package:gravitational_waves/widgets/assets/ui_tileset.dart';
 import 'package:oktoast/oktoast.dart';
-
-import './game/assets/char.dart';
-import './game/assets/tileset.dart';
-import './screens/credits_screen.dart';
-import './screens/game_screen.dart';
-import './screens/join_scoreboard_screen.dart';
-import './screens/options_screen.dart';
-import './screens/skins_screen.dart';
-import 'game/ads.dart';
-import 'game/analytics.dart';
-import 'game/assets/poofs.dart';
-import 'game/audio.dart';
-import 'game/game_data.dart';
-import 'game/preferences.dart';
-import 'screens/scoreboard_screen.dart';
-import 'widgets/assets/ui_tileset.dart';
 
 void main() async {
   print('Starting app...');
 
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Firebase.initializeApp(
-    options: const FirebaseOptions(
-      apiKey: 'AIzaSyAwyHBokdzuZcW_iQ6hu_7DCrP6_DclSqg',
-      authDomain: 'fireslime-gravity-runner.firebaseapp.com',
-      databaseURL: 'https://fireslime-gravity-runner.firebaseio.com',
-      projectId: 'fireslime-gravity-runner',
-      storageBucket: 'fireslime-gravity-runner.appspot.com',
-      messagingSenderId: '107315711863',
-      appId: '1:107315711863:web:1c84176903b93eb824db72',
-      measurementId: 'G-E1SGKDJLF4',
-    ),
-  );
+  if (ENABLE_FIREBASE) {
+    await Firebase.initializeApp(
+      options: const FirebaseOptions(
+        apiKey: 'AIzaSyAwyHBokdzuZcW_iQ6hu_7DCrP6_DclSqg',
+        authDomain: 'fireslime-gravity-runner.firebaseapp.com',
+        databaseURL: 'https://fireslime-gravity-runner.firebaseio.com',
+        projectId: 'fireslime-gravity-runner',
+        storageBucket: 'fireslime-gravity-runner.appspot.com',
+        messagingSenderId: '107315711863',
+        appId: '1:107315711863:web:1c84176903b93eb824db72',
+        measurementId: 'G-E1SGKDJLF4',
+      ),
+    );
+  }
 
   await setMobileOrientation();
 
@@ -64,6 +66,7 @@ void main() async {
   runApp(
     OKToast(
       child: MaterialApp(
+        initialRoute: ENABLE_SPLASH ? '/' : '/game',
         routes: {
           '/': (BuildContext ctx) => FlameSplashScreen(
                 theme: FlameSplashTheme.dark,
@@ -74,7 +77,9 @@ void main() async {
                   );
                 },
                 onFinish: (BuildContext context) {
-                  Navigator.pushNamed(context, '/game');
+                  if (ENABLE_SPLASH) {
+                    Navigator.pushNamed(context, '/game');
+                  }
                 },
               ),
           '/options': (BuildContext ctx) =>
@@ -89,7 +94,7 @@ void main() async {
           '/credits': (BuildContext ctx) => const Scaffold(
                 body: CreditsScreen(),
               ),
-          '/game': (BuildContext ctx) => Scaffold(
+          '/game': (BuildContext ctx) => const Scaffold(
                 body: GameScreen(),
               ),
         },

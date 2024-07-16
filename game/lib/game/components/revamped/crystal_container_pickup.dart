@@ -1,17 +1,17 @@
 import 'dart:ui';
 
 import 'package:flame/components.dart';
-
-import '../../game.dart';
-import '../../util.dart';
-import '../coin.dart';
-import 'poof.dart';
+import 'package:flame/sprite.dart';
+import 'package:gravitational_waves/game/components/coin.dart';
+import 'package:gravitational_waves/game/components/revamped/poof.dart';
+import 'package:gravitational_waves/game/game.dart';
+import 'package:gravitational_waves/game/util.dart';
 
 class CrystalContainerPickup extends SpriteComponent with HasGameRef<MyGame> {
   static const SPAWN_TIMER = 0.05;
   static const TOTAL_TIMER = 4;
 
-  late final SpriteAnimation animation;
+  late final SpriteAnimationTicker animation;
 
   // 0 idle, 1 spawning, 2 destroy
   int _state = 0;
@@ -31,12 +31,14 @@ class CrystalContainerPickup extends SpriteComponent with HasGameRef<MyGame> {
   Future<void> onLoad() async {
     await super.onLoad();
 
-    animation = await SpriteAnimation.load(
-      'crystal_container.png',
-      SpriteAnimationData.sequenced(
-        amount: 16,
-        textureSize: Vector2(16, 32),
-        stepTime: 0.150,
+    animation = SpriteAnimationTicker(
+      await SpriteAnimation.load(
+        'crystal_container.png',
+        SpriteAnimationData.sequenced(
+          amount: 16,
+          textureSize: Vector2(16, 32),
+          stepTime: 0.150,
+        ),
       ),
     );
   }

@@ -3,8 +3,8 @@ import 'dart:ui';
 
 import 'package:flame/components.dart';
 
-import '../game.dart';
-import '../util.dart';
+import 'package:gravitational_waves/game/game.dart';
+import 'package:gravitational_waves/game/util.dart';
 
 class Coin extends SpriteAnimationComponent with HasGameRef<MyGame> {
   static const double SRC_SIZE = 16.0;
@@ -57,7 +57,7 @@ class Coin extends SpriteAnimationComponent with HasGameRef<MyGame> {
     return (x - this.x).abs() < 4 * SIZE;
   }
 
-  bool get offscreen => x < gameRef.camera.position.x - gameRef.size.x;
+  bool get offscreen => x < gameRef.cameraX - gameRef.size.x;
 
   @override
   int get priority => 4;

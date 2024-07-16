@@ -1,10 +1,10 @@
 import 'dart:ui';
 
 import 'package:flame/components.dart';
-
-import '../column.dart';
-import '../game.dart';
-import '../util.dart';
+import 'package:flame/sprite.dart';
+import 'package:gravitational_waves/game/column.dart';
+import 'package:gravitational_waves/game/game.dart';
+import 'package:gravitational_waves/game/util.dart';
 
 class Tutorial extends Component with HasGameRef<MyGame> {
   static final positions = [64 - 6, 64 + 12]
@@ -19,18 +19,20 @@ class Tutorial extends Component with HasGameRef<MyGame> {
         List.generate(8, (_) => Column(0, 0));
   }
 
-  SpriteAnimation? animation;
+  SpriteAnimationTicker? animation;
 
   @override
   Future<void> onLoad() async {
     await super.onLoad();
 
-    animation = await SpriteAnimation.load(
-      'hand.png',
-      SpriteAnimationData.sequenced(
-        amount: 2,
-        textureSize: Vector2(32.0, 48.0),
-        stepTime: 0.6,
+    animation = SpriteAnimationTicker(
+      await SpriteAnimation.load(
+        'hand.png',
+        SpriteAnimationData.sequenced(
+          amount: 2,
+          textureSize: Vector2(32.0, 48.0),
+          stepTime: 0.6,
+        ),
       ),
     );
   }
@@ -59,7 +61,4 @@ class Tutorial extends Component with HasGameRef<MyGame> {
 
   @override
   int get priority => 7;
-
-  @override
-  PositionType get positionType => PositionType.viewport;
 }

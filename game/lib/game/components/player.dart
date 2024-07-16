@@ -1,17 +1,18 @@
 import 'dart:ui';
 
 import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
 import 'package:flame/extensions.dart';
-
-import '../assets/char.dart';
-import '../game.dart';
-import '../game_data.dart';
-import '../palette.dart';
-import '../rumble.dart';
-import '../util.dart';
-import 'background.dart';
-import 'player_particles.dart';
-import 'revamped/jetpack_pickup.dart';
+import 'package:flame/sprite.dart';
+import 'package:gravitational_waves/game/assets/char.dart';
+import 'package:gravitational_waves/game/components/background.dart';
+import 'package:gravitational_waves/game/components/player_particles.dart';
+import 'package:gravitational_waves/game/components/revamped/jetpack_pickup.dart';
+import 'package:gravitational_waves/game/game.dart';
+import 'package:gravitational_waves/game/game_data.dart';
+import 'package:gravitational_waves/game/palette.dart';
+import 'package:gravitational_waves/game/rumble.dart';
+import 'package:gravitational_waves/game/util.dart';
 
 class Player extends PositionComponent with HasGameRef<MyGame> {
   static const HURT_TIMER = 2.0;
@@ -20,10 +21,12 @@ class Player extends PositionComponent with HasGameRef<MyGame> {
   double speedY;
   int livesLeft;
 
-  double hurtTimer = 0, shinyTimer = 0, invulnerabilityTimer = 0;
+  double hurtTimer = 0;
+  double shinyTimer = 0;
+  double invulnerabilityTimer = 0;
 
   JetpackType? jetpackType;
-  SpriteAnimation? jetpackAnimation;
+  SpriteAnimationTicker? jetpackAnimation;
   double jetpackTimeout = 0;
   bool hovering = false;
 
@@ -141,7 +144,7 @@ class Player extends PositionComponent with HasGameRef<MyGame> {
   void renderParticles(Canvas c) {
     c.save();
     c.translate(0, shouldFlip ? 0 : -BLOCK_SIZE);
-    particles.render(c, !jetpack);
+    particles.render(c, renderParticles: !jetpack);
     c.restore();
   }
 
@@ -252,7 +255,7 @@ class Player extends PositionComponent with HasGameRef<MyGame> {
   }
 
   Rect getCurrentRect() {
-    return gameRef.children
+    return gameRef.world.children
         .whereType<Background>()
         .firstWhere((c) => c.containsX(right))
         .findRectContaining(right);
@@ -270,7 +273,7 @@ class Player extends PositionComponent with HasGameRef<MyGame> {
     Vector2 goal,
     double speed,
     double dt, {
-    double treshold = 0.001,
+    double threshold = 0.001,
   }) {
     if (goal.x - width / 2 == x && goal.y - height / 2 == y) {
       return true;
@@ -278,7 +281,7 @@ class Player extends PositionComponent with HasGameRef<MyGame> {
 
     final displacement = toCenter() - goal;
     final prevDist = displacement.length;
-    if (prevDist < treshold) {
+    if (prevDist < threshold) {
       x = goal.x - width / 2;
       y = goal.y - height / 2;
       return true;
@@ -289,7 +292,7 @@ class Player extends PositionComponent with HasGameRef<MyGame> {
     y += delta.y;
 
     final newDist = (toCenter() - goal).length;
-    if (newDist < treshold || newDist > prevDist) {
+    if (newDist < threshold || newDist > prevDist) {
       // right there or overshoot, correct
       x = goal.x - width / 2;
       y = goal.y - height / 2;
@@ -297,5 +300,24 @@ class Player extends PositionComponent with HasGameRef<MyGame> {
     }
 
     return false;
+  }
+}
+
+class PlayerCameraFollower extends ReadOnlyPositionProvider {
+  final MyGame game;
+  final Player player;
+
+  final Vector2 _position = Vector2.zero();
+
+  PlayerCameraFollower({
+    required this.game,
+    required this.player,
+  });
+
+  @override
+  Vector2 get position {
+    _position.x = player.position.x - game.size.x / 3 + game.size.x / 2;
+    _position.y = game.size.y / 2;
+    return _position;
   }
 }

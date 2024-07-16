@@ -1,11 +1,12 @@
+// NOTE: this is a development file to test widgets in isolation
+// ignore: depend_on_referenced_packages
 import 'package:dashbook/dashbook.dart';
 import 'package:flutter/material.dart';
-
-import 'widgets/assets/ui_tileset.dart';
-import 'widgets/button.dart';
-import 'widgets/game_over.dart';
-import 'widgets/label.dart';
-import 'widgets/spritesheet_container.dart';
+import 'package:gravitational_waves/widgets/assets/ui_tileset.dart';
+import 'package:gravitational_waves/widgets/button.dart';
+import 'package:gravitational_waves/widgets/game_over.dart';
+import 'package:gravitational_waves/widgets/label.dart';
+import 'package:gravitational_waves/widgets/spritesheet_container.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

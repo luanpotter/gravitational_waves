@@ -3,24 +3,23 @@ import 'dart:ui';
 import 'package:flame/game.dart';
 import 'package:flame/widgets.dart';
 import 'package:flutter/material.dart';
-
-import '../game/assets/char.dart';
-import '../game/game.dart';
-import '../game/game_data.dart';
-import '../game/skin.dart';
-import '../widgets/button.dart';
-import '../widgets/gr_container.dart';
-import '../widgets/label.dart';
-import '../widgets/palette.dart';
+import 'package:gravitational_waves/game/assets/char.dart';
+import 'package:gravitational_waves/game/game.dart';
+import 'package:gravitational_waves/game/game_data.dart';
+import 'package:gravitational_waves/game/skin.dart';
+import 'package:gravitational_waves/widgets/button.dart';
+import 'package:gravitational_waves/widgets/gr_container.dart';
+import 'package:gravitational_waves/widgets/label.dart';
+import 'package:gravitational_waves/widgets/palette.dart';
 
 class SkinsScreen extends StatefulWidget {
-  const SkinsScreen({Key? key}) : super(key: key);
+  const SkinsScreen({super.key});
 
   @override
-  _SkinsScreenState createState() => _SkinsScreenState();
+  SkinsScreenState createState() => SkinsScreenState();
 }
 
-class _SkinsScreenState extends State<SkinsScreen> {
+class SkinsScreenState extends State<SkinsScreen> {
   Skin? _skinToBuy;
 
   @override
@@ -64,12 +63,13 @@ class _SkinsScreenState extends State<SkinsScreen> {
                   final price = skinPrice(v);
                   final sprite = Char.fromSkin(v);
                   final flameWidget = SizedBox(
-                    child: SpriteWidget(
-                      sprite: sprite,
-                      srcSize: Vector2(100.0, 80.0),
-                    ),
                     width: 100.0,
                     height: 100.0,
+                    child: SpriteWidget(
+                      sprite: sprite,
+                      // TODO(luan): figure out sprite widget size
+                      // size: Vector2(100.0, 80.0),
+                    ),
                   );
                   final widget = isOwned
                       ? flameWidget
@@ -80,12 +80,12 @@ class _SkinsScreenState extends State<SkinsScreen> {
                               child: flameWidget,
                             ),
                             Positioned(
+                              right: 2.0,
+                              top: 2.0,
                               child: Label(
                                 label: '$price gems',
                                 fontColor: PaletteColors.blues.light,
                               ),
-                              right: 2.0,
-                              top: 2.0,
                             ),
                           ],
                         );
@@ -144,7 +144,7 @@ class _SkinsScreenState extends State<SkinsScreen> {
               onPress: () => setState(() {
                 _skinToBuy = null;
               }),
-            )
+            ),
           ],
         ),
       );

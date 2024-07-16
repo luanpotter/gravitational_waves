@@ -3,13 +3,12 @@ import 'dart:ui';
 import 'package:dartlin/dartlin.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
-
-import '../assets/tileset.dart';
-import '../collections.dart';
-import '../game.dart';
-import '../palette.dart';
-import '../util.dart';
-import 'revamped/broken_glass.dart';
+import 'package:gravitational_waves/game/assets/tileset.dart';
+import 'package:gravitational_waves/game/collections.dart';
+import 'package:gravitational_waves/game/components/revamped/broken_glass.dart';
+import 'package:gravitational_waves/game/game.dart';
+import 'package:gravitational_waves/game/palette.dart';
+import 'package:gravitational_waves/game/util.dart';
 
 class Wall extends PositionComponent with HasGameRef<MyGame> {
   static final Paint _wall = Palette.wall.paint();
@@ -37,7 +36,7 @@ class Wall extends PositionComponent with HasGameRef<MyGame> {
   }
 
   void renderColorBg(Canvas c) {
-    c.renderAt(gameRef.camera.position - position, (c) {
+    c.renderAt(gameRef.camera.viewfinder.position - position, (c) {
       final topBar = Rect.fromLTWH(
         -gameRef.size.x / 2,
         0.0,
@@ -58,7 +57,7 @@ class Wall extends PositionComponent with HasGameRef<MyGame> {
   void renderWall(Canvas c) {
     var dx = 0.0;
     var currentPane = currentStartingPane;
-    while (dx < gameRef.camera.position.x + gameRef.size.x + w - x) {
+    while (dx < gameRef.cameraX + gameRef.size.x + w - x) {
       final brokenType = brokenPanes[currentPane];
 
       final sprite =
