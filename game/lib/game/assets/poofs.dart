@@ -1,6 +1,5 @@
 import 'package:flame/components.dart';
-
-import 'spritesheet.dart';
+import 'package:gravitational_waves/game/assets/spritesheet.dart';
 
 class Poofs {
   static late Spritesheet _sheet;

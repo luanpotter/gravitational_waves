@@ -1,10 +1,9 @@
 import 'dart:async';
 import 'dart:math' as math;
 
+import 'package:gravitational_waves/game/skin.dart';
+import 'package:gravitational_waves/game/util.dart';
 import 'package:json_annotation/json_annotation.dart';
-
-import 'skin.dart';
-import 'util.dart';
 
 part 'game_data.g.dart';
 

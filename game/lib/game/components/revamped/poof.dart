@@ -1,7 +1,6 @@
 import 'package:flame/components.dart';
-
-import '../../assets/poofs.dart';
-import '../../game.dart';
+import 'package:gravitational_waves/game/assets/poofs.dart';
+import 'package:gravitational_waves/game/game.dart';
 
 class Poof extends SpriteAnimationComponent with HasGameRef<MyGame> {
   static const double SIZE = 16.0;

@@ -3,6 +3,8 @@ include: package:flame_lint/analysis_options.yaml
 analyzer:
   exclude:
     - "**/*.g.dart"
+  errors:
+    avoid_print: ignore
 
 linter:
   rules:

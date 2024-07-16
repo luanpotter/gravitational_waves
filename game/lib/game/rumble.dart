@@ -1,6 +1,5 @@
 import 'package:flutter/services.dart' show HapticFeedback;
-
-import 'preferences.dart';
+import 'package:gravitational_waves/game/preferences.dart';
 
 class Rumble {
   static void rumble() {

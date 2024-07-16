@@ -1,23 +1,22 @@
 import 'package:flame/game.dart';
 import 'package:flame/widgets.dart';
 import 'package:flutter/material.dart';
-
-import '../game/assets/char.dart';
-import '../game/game.dart';
-import '../game/game_data.dart';
-import '../game/scoreboard.dart';
-import '../widgets/button.dart';
-import '../widgets/label.dart';
-import '../widgets/palette.dart';
+import 'package:gravitational_waves/game/assets/char.dart';
+import 'package:gravitational_waves/game/game.dart';
+import 'package:gravitational_waves/game/game_data.dart';
+import 'package:gravitational_waves/game/scoreboard.dart';
+import 'package:gravitational_waves/widgets/button.dart';
+import 'package:gravitational_waves/widgets/label.dart';
+import 'package:gravitational_waves/widgets/palette.dart';
 
 class ScoreboardScreen extends StatefulWidget {
-  const ScoreboardScreen({Key? key}) : super(key: key);
+  const ScoreboardScreen({super.key});
 
   @override
-  _ScoreboardScreenState createState() => _ScoreboardScreenState();
+  ScoreboardScreenState createState() => ScoreboardScreenState();
 }
 
-class _ScoreboardScreenState extends State<ScoreboardScreen> {
+class ScoreboardScreenState extends State<ScoreboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -43,7 +42,7 @@ class _ScoreboardScreenState extends State<ScoreboardScreen> {
                 ),
                 if (!ENABLE_SCOREBOARD)
                   Label(
-                    label: 'Scoreboard is disabeld for this build.',
+                    label: 'Scoreboard is disabled for this build.',
                     fontColor: PaletteColors.blues.light,
                     fontSize: 24,
                   )
@@ -74,7 +73,7 @@ class _ScoreboardScreenState extends State<ScoreboardScreen> {
                             final data = snapshot.data as List;
                             return showScoreboard(
                               context,
-                              GameData.instance.playerId!,
+                              GameData.instance.playerId,
                               data[0] as List<ScoreBoardEntry>,
                             );
                           }
@@ -88,7 +87,7 @@ class _ScoreboardScreenState extends State<ScoreboardScreen> {
                 const SizedBox(height: 10),
               ],
             ),
-          )
+          ),
         ],
       ),
     );
@@ -103,7 +102,7 @@ class _ScoreboardScreenState extends State<ScoreboardScreen> {
         ? PaletteColors.pinks.dark
         : PaletteColors.blues.light;
 
-    final _list = ListView(
+    final list = ListView(
       padding: const EdgeInsets.all(10),
       children: (entries ?? []).asMap().entries.map((entry) {
         return Container(
@@ -122,7 +121,8 @@ class _ScoreboardScreenState extends State<ScoreboardScreen> {
                     const SizedBox(width: 5),
                     SpriteWidget(
                       sprite: Char.fromSkin(entry.value.skin),
-                      srcSize: Vector2(60.0, 40.0),
+                      // TODO(luan): figure out sprite widget size
+                      // srcSize: Vector2(60.0, 40.0),
                     ),
                     Label(
                       fontColor: fontColor(entry.value),
@@ -169,12 +169,12 @@ class _ScoreboardScreenState extends State<ScoreboardScreen> {
               onPress: () =>
                   Navigator.pushReplacementNamed(context, '/join-scoreboard'),
             ),
-            Expanded(child: _list),
+            Expanded(child: list),
           ],
         ),
       );
     } else {
-      return Flexible(child: _list);
+      return Flexible(child: list);
     }
   }
 }

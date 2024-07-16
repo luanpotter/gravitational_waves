@@ -1,8 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flame/flame.dart';
-
-import 'game_data.dart';
-import 'skin.dart';
+import 'package:gravitational_waves/game/game_data.dart';
+import 'package:gravitational_waves/game/skin.dart';
 
 // does not work rn
 const ENABLE_SCOREBOARD = false;
@@ -22,13 +21,12 @@ class ScoreBoardEntry {
     required this.skin,
   });
 
-  static ScoreBoardEntry fromJson(Map<String, dynamic> json) {
-    return ScoreBoardEntry(
-      skin: parseSkin(json['metadata'] as String),
-      score: (json['score'] as double).toInt(),
-      playerId: json['playerId'] as String,
-    );
-  }
+  ScoreBoardEntry.fromJson(Map<String, dynamic> json)
+      : this(
+          skin: parseSkin(json['metadata'] as String),
+          score: (json['score'] as double).toInt(),
+          playerId: json['playerId'] as String,
+        );
 }
 
 class ScoreBoard {
@@ -44,8 +42,8 @@ class ScoreBoard {
     if (!ENABLE_SCOREBOARD) {
       return [];
     }
-    final _uuid = await getUuid();
-    final resp = await Dio().get<List>('$host/scores/$_uuid?sortOrder=DESC');
+    final uuid = await getUuid();
+    final resp = await Dio().get<List>('$host/scores/$uuid?sortOrder=DESC');
 
     final data = resp.data;
     if (data is List<Map<String, dynamic>>) {
@@ -60,9 +58,9 @@ class ScoreBoard {
       return false;
     }
 
-    final _uuid = await getUuid();
+    final uuid = await getUuid();
     final resp = await Dio()
-        .get<List>('$host/scores/$_uuid?sortOrder=DESC&playerId=$playerId');
+        .get<List>('$host/scores/$uuid?sortOrder=DESC&playerId=$playerId');
 
     final data = resp.data;
 
@@ -90,8 +88,8 @@ class ScoreBoard {
         lastSubmittedScore == null ||
         score > lastSubmittedScore) {
       // Get the token
-      final _uuid = await getUuid();
-      final tokenResponse = await Dio().get<Map>('$host/scores/token/$_uuid');
+      final uuid = await getUuid();
+      final tokenResponse = await Dio().get<Map>('$host/scores/token/$uuid');
       final token = tokenResponse.data?['token'] as String;
 
       final playerId = data.playerId;

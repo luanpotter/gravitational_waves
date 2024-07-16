@@ -1,29 +1,30 @@
 import 'dart:ui';
 
+import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
-
-import 'analytics.dart';
-import 'audio.dart';
-import 'collections.dart';
-import 'components/background.dart';
-import 'components/coin.dart';
-import 'components/hud.dart';
-import 'components/planet.dart';
-import 'components/player.dart';
-import 'components/revamped/powerups.dart';
-import 'components/stars.dart';
-import 'components/tutorial.dart';
-import 'components/wall.dart';
-import 'game_data.dart';
-import 'palette.dart';
-import 'pause_overlay.dart';
-import 'rotation_manager.dart';
-import 'rumble.dart';
-import 'scoreboard.dart';
-import 'spawner.dart';
-import 'util.dart';
+import 'package:gravitational_waves/game/analytics.dart';
+import 'package:gravitational_waves/game/audio.dart';
+import 'package:gravitational_waves/game/collections.dart';
+import 'package:gravitational_waves/game/components/background.dart';
+import 'package:gravitational_waves/game/components/coin.dart';
+import 'package:gravitational_waves/game/components/hud.dart';
+import 'package:gravitational_waves/game/components/planet.dart';
+import 'package:gravitational_waves/game/components/player.dart';
+import 'package:gravitational_waves/game/components/revamped/powerups.dart';
+import 'package:gravitational_waves/game/components/stars.dart';
+import 'package:gravitational_waves/game/components/tutorial.dart';
+import 'package:gravitational_waves/game/components/wall.dart';
+import 'package:gravitational_waves/game/game_data.dart';
+import 'package:gravitational_waves/game/palette.dart';
+import 'package:gravitational_waves/game/pause_overlay.dart';
+import 'package:gravitational_waves/game/rotation_manager.dart';
+import 'package:gravitational_waves/game/rumble.dart';
+import 'package:gravitational_waves/game/scoreboard.dart';
+import 'package:gravitational_waves/game/spawner.dart';
+import 'package:gravitational_waves/game/util.dart';
 
 class MyGame extends FlameGame with TapDetector {
   static Spawner planetSpawner = Spawner(0.12);
@@ -32,6 +33,8 @@ class MyGame extends FlameGame with TapDetector {
   // to callback to the flutter code and go back to the menu
   void Function()? backToMenu;
 
+  // TODO(luan): reconsider this
+  // ignore: avoid_positional_boolean_parameters
   void Function(bool)? showGameOver;
 
   late RotationManager rotationManager;
@@ -53,15 +56,20 @@ class MyGame extends FlameGame with TapDetector {
   late Wall wall;
   late Powerups powerups;
 
+  double get cameraX => camera.viewfinder.position.x;
+
   @override
   Future<void> onLoad() async {
     await super.onLoad();
 
-    camera.viewport = FixedResolutionViewport(
-      Vector2(32, 18) * BLOCK_SIZE,
-      noClip: true,
+    final screenSize = Vector2(32, 18) * BLOCK_SIZE;
+    camera = CameraComponent.withFixedResolution(
+      width: screenSize.x,
+      height: screenSize.y,
+      // TODO(luan): figure this out
+      // noClip: true,
     );
-    camera.speed = 50.0;
+    camera.moveBy(-screenSize / 2);
 
     await preStart();
   }
@@ -78,6 +86,8 @@ class MyGame extends FlameGame with TapDetector {
     coins = 0;
     hasUsedExtraLife = false;
 
+    // TODO(luan): figure out how to do this now
+    // ignore: invalid_use_of_internal_member
     children.clear();
     if (isFirstTime) {
       showTutorial = 0;
@@ -87,42 +97,47 @@ class MyGame extends FlameGame with TapDetector {
       await _addBg(Background.plains(lastGeneratedX));
     }
 
-    add(powerups = Powerups());
-    await add(player = Player());
-    updateCamera();
+    world.add(powerups = Powerups());
+    await world.add(player = Player());
+    setupCamera();
 
-    await add(wall = Wall(firstX - size.x));
-    await add(Stars());
+    await world.add(wall = Wall(firstX - size.x));
+    await camera.viewport.add(Stars());
 
     rotationManager = RotationManager();
   }
 
-  void updateCamera() {
-    camera.snapTo(Vector2(player.position.x - size.x / 3, 0));
+  void setupCamera() {
+    camera.follow(
+      PlayerCameraFollower(game: this, player: player),
+      horizontalOnly: true,
+    );
   }
 
-  void start(bool enablePowerups) {
+  void start({
+    required bool enablePowerups,
+  }) {
     this.enablePowerups = enablePowerups;
     Analytics.log(
       enablePowerups ? EventName.START_REVAMPED : EventName.START_CLASSIC,
     );
     sleeping = false;
-    add(hud = Hud());
+    camera.viewport.add(hud = Hud());
     powerups.reset();
-    generateNextChunck();
+    generateNextChunk();
     Audio.gameMusic();
   }
 
   Future<void> restart() async {
     await preStart();
-    start(enablePowerups);
+    start(enablePowerups: enablePowerups);
   }
 
   Background findBackgroundForX(double x) {
     return children.whereType<Background>().firstWhere((e) => e.containsX(x));
   }
 
-  Future<void> generateNextChunck() async {
+  Future<void> generateNextChunk() async {
     while (lastGeneratedX < player.x + size.x) {
       final bg = Background(lastGeneratedX);
       await _addBg(bg);
@@ -131,9 +146,9 @@ class MyGame extends FlameGame with TapDetector {
         x: lastGeneratedX,
         powerups: enablePowerups,
       );
-      final amountCoints = R.nextInt(1 + coinLevel);
+      final amountCoins = R.nextInt(1 + coinLevel);
       final coins = <Coin>[];
-      for (var i = 0; i < amountCoints; i++) {
+      for (var i = 0; i < amountCoins; i++) {
         final spot = bg.findRectFor(bg.columns.randomIdx(R));
         final top = R.nextBool();
         final x = spot.center.dx;
@@ -144,25 +159,21 @@ class MyGame extends FlameGame with TapDetector {
         }
         final c = Coin(x, y);
         coins.add(c);
-        await add(c);
+        await world.add(c);
       }
     }
   }
 
   Future<void> _addBg(Background bg) async {
-    await add(bg);
+    await world.add(bg);
     lastGeneratedX = bg.endX;
-    // we need to make sure the bg is actually added so
-    // it can be found by other components
-    children.updateComponentList();
   }
 
   int get score => player.x ~/ 100;
 
   Future<void> doShowTutorial() async {
     pause();
-    await add(tutorial = Tutorial());
-    children.updateComponentList();
+    await camera.viewport.add(tutorial = Tutorial());
   }
 
   @override
@@ -173,7 +184,6 @@ class MyGame extends FlameGame with TapDetector {
     }
 
     super.update(t);
-    updateCamera();
 
     if (showTutorial > -1 && player.x >= Tutorial.positions[showTutorial]) {
       doShowTutorial();
@@ -185,13 +195,13 @@ class MyGame extends FlameGame with TapDetector {
 
     if (!sleeping) {
       maybeGeneratePlanet(t);
-      generateNextChunck();
+      generateNextChunk();
       rotationManager.tick(t);
     }
   }
 
   void maybeGeneratePlanet(double dt) {
-    planetSpawner.maybeSpawn(dt, () => add(Planet()));
+    planetSpawner.maybeSpawn(dt, () => camera.viewport.add(Planet()));
   }
 
   void gainExtraLife() {
@@ -214,7 +224,7 @@ class MyGame extends FlameGame with TapDetector {
 
     if (gamePaused) {
       final showMessage = tutorial == null;
-      PauseOverlay.render(canvas, canvasSize, showMessage);
+      PauseOverlay.render(canvas, canvasSize, showMessage: showMessage);
     }
   }
 
@@ -265,6 +275,8 @@ class MyGame extends FlameGame with TapDetector {
 
   @override
   void lifecycleStateChange(AppLifecycleState state) {
+    super.lifecycleStateChange(state);
+
     if (state != AppLifecycleState.resumed) {
       pause();
     } else {
@@ -272,7 +284,7 @@ class MyGame extends FlameGame with TapDetector {
     }
   }
 
-  void gameOver() async {
+  Future<void> gameOver() async {
     Audio.die();
     Audio.stopMusic();
 
@@ -290,6 +302,7 @@ class MyGame extends FlameGame with TapDetector {
 
   void vibrate() {
     Rumble.rumble();
-    camera.shake();
+    // TODO(luan): implement camera shake
+    // camera.shake();
   }
 }

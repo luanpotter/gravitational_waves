@@ -1,7 +1,6 @@
 import 'package:flame/components.dart';
-
-import '../../game.dart';
-import '../../util.dart';
+import 'package:gravitational_waves/game/game.dart';
+import 'package:gravitational_waves/game/util.dart';
 
 class SpaceBattle extends SpriteAnimationComponent with HasGameRef<MyGame> {
   static const S = 1.0;
@@ -15,7 +14,7 @@ class SpaceBattle extends SpriteAnimationComponent with HasGameRef<MyGame> {
     await super.onLoad();
 
     animation = await SpriteAnimation.load(
-      'spacebattle.png',
+      'space-battle.png',
       SpriteAnimationData.sequenced(
         amount: 12,
         textureSize: Vector2(TX_W, TX_H),
@@ -44,7 +43,4 @@ class SpaceBattle extends SpriteAnimationComponent with HasGameRef<MyGame> {
 
   @override
   int get priority => 1;
-
-  @override
-  PositionType get positionType => PositionType.viewport;
 }

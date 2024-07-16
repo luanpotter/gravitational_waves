@@ -1,15 +1,20 @@
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
+import 'package:flame/sprite.dart';
 
-import '../../assets/poofs.dart';
-import '../../game.dart';
-import '../../util.dart';
+import 'package:gravitational_waves/game/assets/poofs.dart';
+import 'package:gravitational_waves/game/game.dart';
+import 'package:gravitational_waves/game/util.dart';
 
 class BrokenGlass extends PositionComponent with HasGameRef<MyGame> {
   static final Vector2 deltaCenter = Vector2.all(BLOCK_SIZE) / 2;
 
-  SpriteAnimation animation = Poofs.airEscaping();
-  SpriteAnimation initialAnimation = Poofs.glassBreaking();
+  SpriteAnimationTicker animation = SpriteAnimationTicker(
+    Poofs.airEscaping(),
+  );
+  SpriteAnimationTicker initialAnimation = SpriteAnimationTicker(
+    Poofs.glassBreaking(),
+  );
 
   BrokenGlass(double x, double y) {
     this.x = x;
@@ -40,7 +45,7 @@ class BrokenGlass extends PositionComponent with HasGameRef<MyGame> {
       gameRef.player.suck(rect.center.toVector2());
     }
 
-    if (x < gameRef.camera.position.x) {
+    if (x < gameRef.cameraX) {
       removeFromParent();
     }
   }

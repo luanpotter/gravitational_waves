@@ -1,23 +1,22 @@
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
-
-import '../game/game.dart';
-import '../game/game_data.dart';
-import '../game/scoreboard.dart';
-import '../game/util.dart';
-import '../widgets/button.dart';
-import '../widgets/gr_container.dart';
-import '../widgets/label.dart';
-import '../widgets/palette.dart';
+import 'package:gravitational_waves/game/game.dart';
+import 'package:gravitational_waves/game/game_data.dart';
+import 'package:gravitational_waves/game/scoreboard.dart';
+import 'package:gravitational_waves/game/util.dart';
+import 'package:gravitational_waves/widgets/button.dart';
+import 'package:gravitational_waves/widgets/gr_container.dart';
+import 'package:gravitational_waves/widgets/label.dart';
+import 'package:gravitational_waves/widgets/palette.dart';
 
 class JoinScoreboardScreen extends StatefulWidget {
-  const JoinScoreboardScreen({Key? key}) : super(key: key);
+  const JoinScoreboardScreen({super.key});
 
   @override
-  _JoinScoreboardScreenState createState() => _JoinScoreboardScreenState();
+  JoinScoreboardScreenState createState() => JoinScoreboardScreenState();
 }
 
-class _JoinScoreboardScreenState extends State<JoinScoreboardScreen> {
+class JoinScoreboardScreenState extends State<JoinScoreboardScreen> {
   final playerIdTextController = TextEditingController();
 
   String _status = '';
@@ -48,14 +47,14 @@ class _JoinScoreboardScreenState extends State<JoinScoreboardScreen> {
       });
 
       return isPlayerIdAvailable;
-    } catch (e) {
+    } on Exception catch (_) {
       setState(() => _status = 'Error');
     }
 
     return false;
   }
 
-  void _join() async {
+  Future<void> _join() async {
     final isPlayerIdAvailable = await _checkPlayerIdAvailability();
 
     final highScore = GameData.instance.highScore;
@@ -120,8 +119,8 @@ class _JoinScoreboardScreenState extends State<JoinScoreboardScreen> {
               Label(
                 label:
                     '''By joining the scoreboard you agree that we collect your score,
-your selected player skin and the choosen player id on the field above.
-Those informations are only used for the display of the scoreboard.
+your selected player skin and the chosen player id on the field above.
+This information is only used for the display of the scoreboard.
                       ''',
                 fontColor: PaletteColors.blues.light,
               ),

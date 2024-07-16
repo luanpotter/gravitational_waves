@@ -1,24 +1,19 @@
 import 'package:flutter/material.dart';
-
-import 'palette.dart';
+import 'package:gravitational_waves/widgets/palette.dart';
 
 typedef OnPress = void Function();
 
 class PrimaryButton extends Button {
-  PrimaryButton({required String label, OnPress? onPress})
+  PrimaryButton({required super.label, super.key, super.onPress})
       : super(
-          label: label,
-          onPress: onPress,
           fontColor: PaletteColors.pinks.normal,
           backgroundColor: PaletteColors.blues.light,
         );
 }
 
 class SecondaryButton extends Button {
-  SecondaryButton({required String label, OnPress? onPress})
+  SecondaryButton({required super.label, super.key, super.onPress})
       : super(
-          label: label,
-          onPress: onPress,
           fontColor: PaletteColors.blues.light,
           backgroundColor: PaletteColors.pinks.normal,
         );
@@ -34,6 +29,7 @@ class Button extends StatelessWidget {
 
   const Button({
     required this.label,
+    super.key,
     this.onPress,
     this.fontColor,
     this.backgroundColor,

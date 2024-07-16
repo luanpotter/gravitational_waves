@@ -1,9 +1,9 @@
 import 'dart:ui';
+
 import 'package:flame/extensions.dart';
 import 'package:flame/particles.dart';
-
-import '../palette.dart';
-import '../util.dart';
+import 'package:gravitational_waves/game/palette.dart';
+import 'package:gravitational_waves/game/util.dart';
 
 class PlayerParticles {
   final List<Particle> jetpackParticles = [];
@@ -25,7 +25,7 @@ class PlayerParticles {
     });
   }
 
-  void render(Canvas c, bool renderParticles) {
+  void render(Canvas c, {required bool renderParticles}) {
     if (!particle.shouldRemove && renderParticles) {
       particle.render(c);
     }

@@ -1,14 +1,13 @@
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
-
-import '../game/game.dart';
-import '../widgets/button.dart';
-import '../widgets/gr_container.dart';
-import '../widgets/label.dart';
-import '../widgets/palette.dart';
+import 'package:gravitational_waves/game/game.dart';
+import 'package:gravitational_waves/widgets/button.dart';
+import 'package:gravitational_waves/widgets/gr_container.dart';
+import 'package:gravitational_waves/widgets/label.dart';
+import 'package:gravitational_waves/widgets/palette.dart';
 
 class CreditsScreen extends StatelessWidget {
-  const CreditsScreen({Key? key}) : super(key: key);
+  const CreditsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +42,7 @@ class CreditsScreen extends StatelessWidget {
                           const Link(
                             link: 'https://fireslime.xyz',
                             fontSize: 18,
-                          )
+                          ),
                         ],
                       ),
                     ),

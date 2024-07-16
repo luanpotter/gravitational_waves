@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-
-import 'button.dart';
-import 'gr_container.dart';
-import 'label.dart';
-import 'palette.dart';
+import 'package:gravitational_waves/widgets/button.dart';
+import 'package:gravitational_waves/widgets/gr_container.dart';
+import 'package:gravitational_waves/widgets/label.dart';
+import 'package:gravitational_waves/widgets/palette.dart';
 
 class _Line extends StatelessWidget {
   final String leftLabel;
@@ -54,6 +53,7 @@ class GameOverContainer extends StatelessWidget {
     required this.goToMainMenu,
     required this.playAgain,
     required this.extraLife,
+    super.key,
   });
 
   @override
@@ -87,6 +87,8 @@ class GameOverContainer extends StatelessWidget {
 }
 
 class GameOverLoadingContainer extends StatelessWidget {
+  const GameOverLoadingContainer({super.key});
+
   @override
   Widget build(BuildContext context) {
     return const GRContainer(

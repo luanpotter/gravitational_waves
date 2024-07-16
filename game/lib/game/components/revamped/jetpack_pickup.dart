@@ -1,7 +1,7 @@
 import 'package:flame/components.dart';
-
-import '../../game.dart';
-import '../../util.dart';
+import 'package:flame/sprite.dart';
+import 'package:gravitational_waves/game/game.dart';
+import 'package:gravitational_waves/game/util.dart';
 
 enum JetpackType { REGULAR, PULSER }
 
@@ -12,7 +12,7 @@ class JetpackPickup extends SpriteComponent with HasGameRef<MyGame> {
   static const JETPACK_DURATION = 15.0;
 
   late final Sprite jetpack;
-  late final SpriteAnimation pulser;
+  late final SpriteAnimationTicker pulser;
 
   JetpackType type;
   double hoverClock = 0.0;
@@ -30,29 +30,33 @@ class JetpackPickup extends SpriteComponent with HasGameRef<MyGame> {
     await super.onLoad();
 
     jetpack = await Sprite.load('jetpack.png');
-    pulser = await SpriteAnimation.load(
-      'pulser.png',
-      SpriteAnimationData.sequenced(
-        amount: 6,
-        textureSize: Vector2.all(16),
-        loop: false,
-        stepTime: 0.15,
+    pulser = SpriteAnimationTicker(
+      await SpriteAnimation.load(
+        'pulser.png',
+        SpriteAnimationData.sequenced(
+          amount: 6,
+          textureSize: Vector2.all(16),
+          loop: false,
+          stepTime: 0.15,
+        ),
       ),
-    )
-      ..setToLast();
+    )..setToLast();
   }
 
   @override
   Sprite get sprite => getSpriteForType();
 
   Sprite getSpriteForType() {
-    return type == JetpackType.REGULAR ? jetpack : pulser.frames[0].sprite;
+    return type == JetpackType.REGULAR
+        ? jetpack
+        : pulser.spriteAnimation.frames[0].sprite;
   }
 
-  SpriteAnimation getAnimationForType(JetpackType type) {
-    return type == JetpackType.REGULAR
+  SpriteAnimationTicker getAnimationForType(JetpackType type) {
+    final animation = type == JetpackType.REGULAR
         ? SpriteAnimation.spriteList([jetpack], stepTime: 0)
-        : pulser.clone();
+        : pulser.spriteAnimation.clone();
+    return SpriteAnimationTicker(animation);
   }
 
   @override

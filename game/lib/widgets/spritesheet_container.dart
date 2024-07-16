@@ -75,12 +75,7 @@ class _Painter extends widgets.CustomPainter {
           x = x + destTileSize) {
         middle.renderRect(
           canvas,
-          Rect.fromLTWH(
-            x,
-            y,
-            destTileSize,
-            destTileSize,
-          ),
+          Rect.fromLTWH(x, y, destTileSize, destTileSize),
         );
       }
     }
@@ -192,6 +187,7 @@ class SpritesheetContainer extends widgets.StatelessWidget {
     required this.spriteSheet,
     required this.tileSize,
     required this.destTileSize,
+    super.key,
     this.width,
     this.height,
     this.padding,
@@ -209,8 +205,8 @@ class SpritesheetContainer extends widgets.StatelessWidget {
           destTileSize: destTileSize,
         ),
         child: widgets.Container(
-          child: child,
           padding: padding,
+          child: child,
         ),
       ),
     );

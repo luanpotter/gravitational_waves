@@ -1,8 +1,7 @@
 import 'package:flame/components.dart';
-
-import '../../collections.dart';
-import '../../game.dart';
-import '../../util.dart';
+import 'package:gravitational_waves/game/collections.dart';
+import 'package:gravitational_waves/game/game.dart';
+import 'package:gravitational_waves/game/util.dart';
 
 class FiringShip extends SpriteAnimationComponent with HasGameRef<MyGame> {
   static const scaleFactor = 2.0;
@@ -13,7 +12,8 @@ class FiringShip extends SpriteAnimationComponent with HasGameRef<MyGame> {
   double myScale = 0;
   double clock = 0.0;
 
-  late List<double> beforeHoleScales, afterHoleScales;
+  late List<double> beforeHoleScales;
+  late List<double> afterHoleScales;
 
   @override
   Future<void> onLoad() async {
@@ -71,7 +71,4 @@ class FiringShip extends SpriteAnimationComponent with HasGameRef<MyGame> {
 
   @override
   int get priority => 1;
-
-  @override
-  PositionType get positionType => PositionType.viewport;
 }

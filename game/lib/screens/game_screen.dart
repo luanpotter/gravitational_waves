@@ -3,25 +3,26 @@ import 'dart:io';
 import 'package:flame/game.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
-import '../game/ads.dart';
-import '../game/audio.dart';
-import '../game/game.dart';
-import '../game/game_data.dart';
-import '../game/util.dart';
-import '../widgets/button.dart';
-import '../widgets/game_over.dart';
-import '../widgets/label.dart';
-import '../widgets/slide_in_container.dart';
+import 'package:gravitational_waves/game/ads.dart';
+import 'package:gravitational_waves/game/audio.dart';
+import 'package:gravitational_waves/game/game.dart';
+import 'package:gravitational_waves/game/game_data.dart';
+import 'package:gravitational_waves/game/util.dart';
+import 'package:gravitational_waves/widgets/button.dart';
+import 'package:gravitational_waves/widgets/game_over.dart';
+import 'package:gravitational_waves/widgets/label.dart';
+import 'package:gravitational_waves/widgets/slide_in_container.dart';
 
 class GameScreen extends StatefulWidget {
+  const GameScreen({super.key});
+
   @override
   State<StatefulWidget> createState() {
-    return _GameScreenState();
+    return GameScreenState();
   }
 }
 
-class _GameScreenState extends State<GameScreen> {
+class GameScreenState extends State<GameScreen> {
   MyGame? game;
   bool _playing = false;
   bool _playSection = false;
@@ -44,7 +45,7 @@ class _GameScreenState extends State<GameScreen> {
   }
 
   void startGame({required bool enablePowerups}) {
-    game!.start(enablePowerups);
+    game!.start(enablePowerups: enablePowerups);
 
     setState(() {
       _playSection = false;
@@ -52,9 +53,9 @@ class _GameScreenState extends State<GameScreen> {
     });
   }
 
-  void handleExtraLife() async {
+  Future<void> handleExtraLife() async {
     if (game!.hasUsedExtraLife) {
-      print('You arealdy used your extra life.');
+      print('You already used your extra life.');
       return;
     }
     setState(() => _adLoading = true);
@@ -83,7 +84,7 @@ class _GameScreenState extends State<GameScreen> {
             from: const Offset(0.0, 1.5),
             duration: const Duration(milliseconds: 500),
             child: _adLoading
-                ? GameOverLoadingContainer()
+                ? const GameOverLoadingContainer()
                 : GameOverContainer(
                     distance: game.score,
                     gems: game.coins,
@@ -141,8 +142,10 @@ class _GameScreenState extends State<GameScreen> {
       } else {
         sectionChildren.addAll([
           Label(
-            label:
-                'Total Gems: ${GameData.instance.coins} | High Score: ${GameData.instance.highScore ?? '-'}',
+            label: [
+              'Total Gems: ${GameData.instance.coins}',
+              'High Score: ${GameData.instance.highScore ?? '-'}',
+            ].join(' | '),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -198,7 +201,7 @@ class _GameScreenState extends State<GameScreen> {
                 curve: Curves.fastOutSlowIn,
                 child: SlideInContainer(
                   from: const Offset(0.0, -1.5),
-                  child: Image.asset('assets/images/game_logo.png', width: 400),
+                  child: Image.asset('assets/images/game-logo.png', width: 400),
                 ),
               ),
               Expanded(

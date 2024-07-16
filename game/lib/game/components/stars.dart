@@ -1,11 +1,10 @@
 import 'dart:ui';
 
 import 'package:flame/components.dart';
-
-import '../assets/tileset.dart';
-import '../collections.dart';
-import '../game.dart';
-import '../util.dart';
+import 'package:gravitational_waves/game/assets/tileset.dart';
+import 'package:gravitational_waves/game/collections.dart';
+import 'package:gravitational_waves/game/game.dart';
+import 'package:gravitational_waves/game/util.dart';
 
 class Stars extends PositionComponent with HasGameRef<MyGame> {
   late List<int> repeats;
@@ -52,7 +51,4 @@ class Stars extends PositionComponent with HasGameRef<MyGame> {
 
   @override
   int get priority => 0;
-
-  @override
-  PositionType get positionType => PositionType.viewport;
 }

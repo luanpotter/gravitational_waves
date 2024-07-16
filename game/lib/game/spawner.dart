@@ -1,4 +1,4 @@
-import 'util.dart';
+import 'package:gravitational_waves/game/util.dart';
 
 class Spawner {
   double chance; // chance per second

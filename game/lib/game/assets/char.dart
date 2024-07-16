@@ -1,7 +1,6 @@
 import 'package:flame/sprite.dart';
-
-import '../skin.dart';
-import 'spritesheet.dart';
+import 'package:gravitational_waves/game/assets/spritesheet.dart';
+import 'package:gravitational_waves/game/skin.dart';
 
 class Char {
   static late Spritesheet _sheet;

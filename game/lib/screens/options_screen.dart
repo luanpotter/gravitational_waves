@@ -1,21 +1,20 @@
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
-
-import '../game/game.dart';
-import '../game/preferences.dart';
-import '../widgets/button.dart';
-import '../widgets/gr_container.dart';
-import '../widgets/label.dart';
-import '../widgets/palette.dart';
+import 'package:gravitational_waves/game/game.dart';
+import 'package:gravitational_waves/game/preferences.dart';
+import 'package:gravitational_waves/widgets/button.dart';
+import 'package:gravitational_waves/widgets/gr_container.dart';
+import 'package:gravitational_waves/widgets/label.dart';
+import 'package:gravitational_waves/widgets/palette.dart';
 
 class OptionsScreen extends StatefulWidget {
-  const OptionsScreen({Key? key}) : super(key: key);
+  const OptionsScreen({super.key});
 
   @override
-  _OptionsScreenState createState() => _OptionsScreenState();
+  OptionsScreenState createState() => OptionsScreenState();
 }
 
-class _OptionsScreenState extends State<OptionsScreen> {
+class OptionsScreenState extends State<OptionsScreen> {
   @override
   Widget build(BuildContext context) {
     return Stack(
