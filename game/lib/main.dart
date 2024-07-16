@@ -66,6 +66,7 @@ void main() async {
   runApp(
     OKToast(
       child: MaterialApp(
+        initialRoute: ENABLE_SPLASH ? '/' : '/game',
         routes: {
           '/': (BuildContext ctx) => FlameSplashScreen(
                 theme: FlameSplashTheme.dark,
@@ -76,7 +77,9 @@ void main() async {
                   );
                 },
                 onFinish: (BuildContext context) {
-                  Navigator.pushNamed(context, '/game');
+                  if (ENABLE_SPLASH) {
+                    Navigator.pushNamed(context, '/game');
+                  }
                 },
               ),
           '/options': (BuildContext ctx) =>

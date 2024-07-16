@@ -69,7 +69,6 @@ class MyGame extends FlameGame with TapDetector {
       // TODO(luan): figure this out
       // noClip: true,
     );
-    camera.moveBy(-screenSize / 2);
 
     await preStart();
   }
@@ -86,9 +85,7 @@ class MyGame extends FlameGame with TapDetector {
     coins = 0;
     hasUsedExtraLife = false;
 
-    // TODO(luan): figure out how to do this now
-    // ignore: invalid_use_of_internal_member
-    children.clear();
+    world.clear();
     if (isFirstTime) {
       showTutorial = 0;
       await _addBg(Background.tutorial(lastGeneratedX));
@@ -97,12 +94,14 @@ class MyGame extends FlameGame with TapDetector {
       await _addBg(Background.plains(lastGeneratedX));
     }
 
-    world.add(powerups = Powerups());
-    await world.add(player = Player());
+    await world.addAll([
+      powerups = Powerups(),
+      player = Player(),
+    ]);
     setupCamera();
 
     await world.add(wall = Wall(firstX - size.x));
-    await camera.viewport.add(Stars());
+    camera.backdrop = Stars();
 
     rotationManager = RotationManager();
   }
@@ -110,7 +109,6 @@ class MyGame extends FlameGame with TapDetector {
   void setupCamera() {
     camera.follow(
       PlayerCameraFollower(game: this, player: player),
-      horizontalOnly: true,
     );
   }
 

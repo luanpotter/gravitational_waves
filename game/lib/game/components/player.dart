@@ -316,7 +316,8 @@ class PlayerCameraFollower extends ReadOnlyPositionProvider {
 
   @override
   Vector2 get position {
-    _position.x = player.position.x - game.size.x / 3;
+    _position.x = player.position.x - game.size.x / 3 + game.size.x / 2;
+    _position.y = game.size.y / 2;
     return _position;
   }
 }
